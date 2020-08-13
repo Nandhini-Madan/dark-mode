@@ -1,20 +1,21 @@
+import { useEffect } from 'react';
+import { useLocalStorage } from './useLocalStorage';
 
-import { useEffect } from "react";
-import {useLocalStorage} from "./useLocalStorage";
+export const useDarkMode = () => {
+  const [enabledState, setEnabledState] = useLocalStorage('dark-mode-enabled');
 
-export const useDarkMode=()=>{
-    const [toggleState,setToggleState]=useLocalStorage('dark-mode-enabled')
-    useEffect(()=>{
-        const className='dark-mode';
-        const element=window.document.body;
-        if(toggleState){
-            element.classList.add(className);
-        }
-        else{
-            element.classList.remove(className);
-        }
+  useEffect(
+    () => {
+      const className = 'dark-mode';
+      const element = window.document.body;
+      if (enabledState) {
+        element.classList.add(className);
+      } else {
+        element.classList.remove(className);
+      }
+    },
+    [enabledState] // Only call effect again when value changes
+  );
 
-    },[toggleState]);
-    return[toggleState,setToggleState];
-}
-
+  return [enabledState, setEnabledState];
+};
